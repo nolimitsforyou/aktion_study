@@ -1,0 +1,10 @@
+.idea
+.gradle
+
+out
+allure-results
+build
+*.local.properties
+*.log
+*.iml
+*.png
