@@ -18,18 +18,23 @@ public class SimpleTest extends TestBase {
     public void test() {
 
         openPageInBrowser(url);
-        checkLogo(googleLogo);
-        checkLogo(yandexLogo);
+        checkLogoGoogle(googleLogo);
+        checkLogoYandex(yandexLogo);
 
     }
 
-    @Step("Открыть в браузере страница")
+    @Step("Открыть в браузере страницу")
     public void openPageInBrowser(String url) {
         open(url);
     }
 
-    @Step("Проверить что отображается логотив гугл")
-    public void checkLogo(SelenideElement element) {
+    @Step("Проверить что отображается логотип гугла")
+    public void checkLogoGoogle(SelenideElement element) {
+        element.shouldBe(Condition.visible);
+    }
+
+    @Step("Проверить что отображается логотип яндекса")
+    public void checkLogoYandex(SelenideElement element) {
         element.shouldBe(Condition.visible);
     }
 
