@@ -3,11 +3,9 @@ package ru.aktion_study.test;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.WebDriverRunner;
 import net.lightbody.bmp.BrowserMobProxyServer;
-import net.lightbody.bmp.core.har.Har;
 import net.lightbody.bmp.proxy.CaptureType;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
-
 import org.openqa.selenium.remote.DesiredCapabilities;
 import ru.aktion_study.test.proxy.Bmp;
 
@@ -22,12 +20,11 @@ public class TestBase {
         Bmp.proxyServer.setHarCaptureTypes(CaptureType
                 .getAllContentCaptureTypes());
 
-
-        Configuration.startMaximized = true;
-        Configuration.timeout = 10L;
-        DesiredCapabilities dCapabilities = new DesiredCapabilities();
-        dCapabilities.setBrowserName("chrome");
-        Configuration.browserCapabilities = dCapabilities;
+//        Configuration.startMaximized = true;
+//        Configuration.timeout = 10L;
+//        DesiredCapabilities dCapabilities = new DesiredCapabilities();
+//        dCapabilities.setBrowserName("chrome");
+//        Configuration.browserCapabilities = dCapabilities;
     }
 
     @AfterAll
