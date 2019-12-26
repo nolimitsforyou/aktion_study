@@ -4,9 +4,9 @@ import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 import io.qameta.allure.Step;
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.remote.DesiredCapabilities;
 import static com.codeborne.selenide.Selenide.open;
-import static ru.aktion_study.test.Locators.googleLogo;
-import static ru.aktion_study.test.Locators.yandexLogo;
 
 
 public class SimpleTest extends TestBase {
@@ -16,9 +16,10 @@ public class SimpleTest extends TestBase {
     @Test
     public void test() {
 
-        openPageInBrowser(url);
-        checkLogoGoogle(googleLogo);
-        checkLogoYandex(yandexLogo);
+        WebDriver driver = createDriver(new DesiredCapabilities());
+
+        driver.get(url);
+        driver.get(url);
 
     }
 
