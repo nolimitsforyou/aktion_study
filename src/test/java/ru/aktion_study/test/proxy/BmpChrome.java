@@ -11,11 +11,6 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 public class BmpChrome implements WebDriverProvider {
     @Override
     public WebDriver createDriver(DesiredCapabilities desiredCapabilities) {
-//        DesiredCapabilities capabilities = DesiredCapabilities.chrome();
-//        capabilities.setCapability(CapabilityType.PROXY,
-//                ClientUtil.createSeleniumProxy(Bmp.proxyServer));
-//        return new ChromeDriver(capabilities);
-
         ChromeOptions options = new ChromeOptions();
         options.setCapability(CapabilityType.PROXY, ClientUtil.createSeleniumProxy(Bmp.proxyServer));
         return new ChromeDriver(options);

@@ -1,34 +1,29 @@
 package ru.aktion_study.test;
 
-import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.WebDriverRunner;
+import net.lightbody.bmp.BrowserMobProxy;
 import net.lightbody.bmp.BrowserMobProxyServer;
-import net.lightbody.bmp.proxy.CaptureType;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
-import org.openqa.selenium.remote.DesiredCapabilities;
-import ru.aktion_study.test.proxy.Bmp;
+import org.openqa.selenium.Proxy;
+
 
 public class TestBase {
 
+    public static BrowserMobProxy server;
 
     @BeforeAll
     public static void setUp() {
-        System.setProperty("selenide.browser", "ru.aktion_study.test.proxy.BmpChrome");
-        Bmp.proxyServer = new BrowserMobProxyServer();
-        Bmp.proxyServer.start(0);
-        Bmp.proxyServer.setHarCaptureTypes(CaptureType
-                .getAllContentCaptureTypes());
+        server = new BrowserMobProxyServer();
+        server.start();
 
-//        Configuration.startMaximized = true;
-//        Configuration.timeout = 10L;
-//        DesiredCapabilities dCapabilities = new DesiredCapabilities();
-//        dCapabilities.setBrowserName("chrome");
-//        Configuration.browserCapabilities = dCapabilities;
+        Proxy seleniumProxy = new Proxy();
+        WebDriverRunner.setProxy(seleniumProxy);
     }
 
     @AfterAll
     public static void down() {
         WebDriverRunner.closeWebDriver();
+        server.stop();
     }
 }
