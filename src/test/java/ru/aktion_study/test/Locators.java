@@ -1,10 +1,11 @@
 package ru.aktion_study.test;
 
-import com.codeborne.selenide.SelenideElement;
+import org.openqa.selenium.By;
 
-import static com.codeborne.selenide.Selenide.*;
 
 public class Locators {
-    public static SelenideElement googleLogo = $x("//img[@id='hplogo']");
-    public static SelenideElement yandexLogo = $x("//div[@class='home-logo__default']");
+
+    public static By googleLogo = By.xpath("//img[@id='hplogo']");
+    public static By yandexLogo = By.xpath("//div[@class='home-logo__default']");
+
 }

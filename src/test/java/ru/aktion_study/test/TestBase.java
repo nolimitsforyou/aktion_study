@@ -18,16 +18,18 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 
 public class TestBase implements WebDriverProvider {
 
+    private static BrowserMobProxy bmproxy;
+
     @Override
     public WebDriver createDriver(DesiredCapabilities desiredCapabilities) {
 
+        bmproxy = new BrowserMobProxyServer();
+        bmproxy.start();
         ChromeOptions options = new ChromeOptions();
-        BrowserMobProxy bmproxy = new BrowserMobProxyServer();
-        bmproxy.start(); // specify the port and address here.
+        options.addArguments("start-maximized");
         Proxy seleniumProxy = ClientUtil.createSeleniumProxy(bmproxy);
-        // configure it as a desired capability
         desiredCapabilities.setCapability(CapabilityType.PROXY, seleniumProxy);
-        // start the browser up
+        desiredCapabilities.setCapability(ChromeOptions.CAPABILITY, options);
         WebDriver driver = new ChromeDriver(desiredCapabilities);
         return driver;
     }
@@ -35,5 +37,6 @@ public class TestBase implements WebDriverProvider {
     @AfterAll
     public static void down() {
         WebDriverRunner.closeWebDriver();
+        bmproxy.stop();
     }
 }
