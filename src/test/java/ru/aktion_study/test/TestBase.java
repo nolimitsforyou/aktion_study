@@ -22,14 +22,13 @@ public class TestBase implements WebDriverProvider {
 
     @Override
     public WebDriver createDriver(DesiredCapabilities desiredCapabilities) {
-
         bmproxy = new BrowserMobProxyServer();
         bmproxy.start();
         ChromeOptions options = new ChromeOptions();
         options.addArguments("start-maximized");
         Proxy seleniumProxy = ClientUtil.createSeleniumProxy(bmproxy);
         desiredCapabilities.setCapability(CapabilityType.PROXY, seleniumProxy);
-        desiredCapabilities.setCapability(ChromeOptions.CAPABILITY, options);
+//        desiredCapabilities.setCapability(ChromeOptions.CAPABILITY, options);
         WebDriver driver = new ChromeDriver(desiredCapabilities);
         return driver;
     }
