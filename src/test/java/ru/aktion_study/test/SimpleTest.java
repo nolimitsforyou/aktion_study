@@ -18,4 +18,13 @@ public class SimpleTest extends TestBase {
                 .checkLogoGoogle()
                 .checkLogoYandex();
     }
+
+
+   /* @Test
+    public void test2() {
+        new DefaultSteps(driver)
+                .openPageInBrowser(url)
+                .checkLogoGoogle()
+                .checkLogoYandex();
+    }*/
 }
