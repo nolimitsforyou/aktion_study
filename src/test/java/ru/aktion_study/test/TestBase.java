@@ -1,14 +1,9 @@
 package ru.aktion_study.test;
 
-
-import com.codeborne.selenide.WebDriverProvider;
-import com.codeborne.selenide.WebDriverRunner;
-import net.lightbody.bmp.BrowserMobProxy;
 import net.lightbody.bmp.BrowserMobProxyServer;
 import net.lightbody.bmp.client.ClientUtil;
-import net.lightbody.bmp.core.har.Har;
-import net.lightbody.bmp.proxy.CaptureType;
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -17,36 +12,49 @@ import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 
-public class TestBase implements WebDriverProvider {
+import java.net.Inet4Address;
+import java.net.UnknownHostException;
 
-    private static WebDriver driver;
 
-    @Override
-    public WebDriver createDriver(DesiredCapabilities desiredCapabilities) {
+public class TestBase {
 
-        BrowserMobProxy proxy = new BrowserMobProxyServer();
-        proxy.start(0);
-        // get the Selenium proxy object
-        Proxy seleniumProxy = ClientUtil.createSeleniumProxy(proxy);
-        // configure it as a desired capability
-        DesiredCapabilities capabilities = new DesiredCapabilities();
-        capabilities.setCapability(CapabilityType.PROXY, seleniumProxy);
-        // start the browser up
-        driver = new ChromeDriver(capabilities);
-       /* // enable more detailed HAR capture, if desired (see CaptureType for the complete list)
-        proxy.enableHarCaptureTypes(CaptureType.REQUEST_CONTENT, CaptureType.RESPONSE_CONTENT);
-        // create a new HAR with the label "yahoo.com"
-        proxy.newHar("yahoo.com");
-        // open yahoo.com
-        driver.get("http://yahoo.com");
-        // get the HAR data
-        Har har = proxy.getHar();*/
+    public static WebDriver driver;
+    private static BrowserMobProxyServer proxyServer;
 
-        return driver;
+    @BeforeAll
+    public static void createDriver() {
+
+        proxyServer = new BrowserMobProxyServer();
+        proxyServer.start();
+
+        Proxy seleniumProxy = ClientUtil.createSeleniumProxy(proxyServer);
+        try {
+            String hostIp = Inet4Address.getLocalHost().getHostAddress();
+            seleniumProxy.setHttpProxy(hostIp + ":" + proxyServer.getPort());
+            seleniumProxy.setSslProxy(hostIp + ":" + proxyServer.getPort());
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
+
+   /*     seleniumProxy = ClientUtil.createSeleniumProxy(proxyServer);
+        seleniumProxy.setHttpProxy("localhost: " + proxyServer.getPort());
+        seleniumProxy.setSslProxy("localhost: " + proxyServer.getPort());
+        ChromeOptions options = new ChromeOptions();
+        options.setCapability(CapabilityType.PROXY, seleniumProxy);
+        driver = new ChromeDriver(options);*/
+
+        DesiredCapabilities caps = new DesiredCapabilities();
+        caps.setCapability(CapabilityType.PROXY, seleniumProxy);
+//        caps.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);
+        ChromeOptions options = new ChromeOptions();
+        options.merge(caps);
+        driver = new ChromeDriver(options);
+        driver.manage().window().maximize();
     }
 
     @AfterAll
     public static void down() {
         driver.close();
+        proxyServer.stop();
     }
 }

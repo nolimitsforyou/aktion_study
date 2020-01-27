@@ -23,9 +23,7 @@ repositories {
 }
 
 dependencies {
-//    compile 'com.codeborne:selenide:5.5.1'
     testImplementation('org.junit.jupiter:junit-jupiter-api:5.2.0')
-//    testRuntimeOnly('org.junit.jupiter:junit-jupiter-engine:5.2.0')
     compile group: 'io.qameta.allure', name: 'allure-selenide', version: '2.13.0'
     compile group: 'net.lightbody.bmp', name: 'browsermob-proxy', version: '2.1.5', ext: 'pom'
     compile group: 'org.seleniumhq.selenium', name: 'selenium-java', version: '3.141.59'
