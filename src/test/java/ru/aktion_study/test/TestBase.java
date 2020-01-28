@@ -21,8 +21,8 @@ import java.net.UnknownHostException;
 public class TestBase {
 
     public static WebDriver driver;
-    private static BrowserMobProxyServer proxyServer;
-    private static Proxy seleniumProxy;
+    public static BrowserMobProxyServer proxyServer;
+    public static Proxy seleniumProxy;
 
     @BeforeAll
     public static void createDriver() {
@@ -56,5 +56,4 @@ public class TestBase {
         driver.close();
         proxyServer.stop();
     }
-
 }
