@@ -1,5 +1,6 @@
 package ru.aktion_study.test;
 
+import net.lightbody.bmp.BrowserMobProxy;
 import net.lightbody.bmp.BrowserMobProxyServer;
 import net.lightbody.bmp.client.ClientUtil;
 import org.junit.jupiter.api.AfterAll;
@@ -13,6 +14,7 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 
 
 import java.net.Inet4Address;
+import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 
@@ -20,34 +22,31 @@ public class TestBase {
 
     public static WebDriver driver;
     private static BrowserMobProxyServer proxyServer;
+    private static Proxy seleniumProxy;
 
     @BeforeAll
     public static void createDriver() {
 
         proxyServer = new BrowserMobProxyServer();
+        proxyServer.setTrustAllServers(true);
         proxyServer.start();
+        int port = proxyServer.getPort();
+        System.out.println("BrowserMob Proxy running on port: " + port);
 
-        Proxy seleniumProxy = ClientUtil.createSeleniumProxy(proxyServer);
+        seleniumProxy = ClientUtil.createSeleniumProxy(proxyServer);
         try {
             String hostIp = Inet4Address.getLocalHost().getHostAddress();
-            seleniumProxy.setHttpProxy(hostIp + ":" + proxyServer.getPort());
-            seleniumProxy.setSslProxy(hostIp + ":" + proxyServer.getPort());
+            seleniumProxy.setHttpProxy(hostIp + ":" + port);
+            seleniumProxy.setSslProxy(hostIp + ":" + port);
         } catch (UnknownHostException e) {
             e.printStackTrace();
         }
 
-   /*     seleniumProxy = ClientUtil.createSeleniumProxy(proxyServer);
-        seleniumProxy.setHttpProxy("localhost: " + proxyServer.getPort());
-        seleniumProxy.setSslProxy("localhost: " + proxyServer.getPort());
-        ChromeOptions options = new ChromeOptions();
-        options.setCapability(CapabilityType.PROXY, seleniumProxy);
-        driver = new ChromeDriver(options);*/
-
         DesiredCapabilities caps = new DesiredCapabilities();
         caps.setCapability(CapabilityType.PROXY, seleniumProxy);
-//        caps.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);
         ChromeOptions options = new ChromeOptions();
         options.merge(caps);
+        options.addArguments("--ignore-certificate-errors");
         driver = new ChromeDriver(options);
         driver.manage().window().maximize();
     }
@@ -57,4 +56,5 @@ public class TestBase {
         driver.close();
         proxyServer.stop();
     }
+
 }
