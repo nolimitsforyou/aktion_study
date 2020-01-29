@@ -11,6 +11,7 @@ import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import ru.aktion_study.test.TestBase;
+import ru.stqa.selenium.factory.WebDriverPool;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -27,15 +28,15 @@ public class AllureStepsListener implements StepLifecycleListener, TestLifecycle
     public void beforeTestStop(TestResult result) {
         getHar();
     }
-    /* @Override
+     @Override
     public void afterStepStop(StepResult result) {
         if ( result.getStatus() == Status.FAILED ) getScreenshotBytes();
-    }*/
+    }
 
-   /* @Attachment(value = "Screenshot", type = "image/png", fileExtension = "png")
+    @Attachment(value = "Screenshot", type = "image/png", fileExtension = "png")
     private static byte[] getScreenshotBytes() {
         return ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
-    }*/
+    }
 
     @Override
     public void beforeTestStart(TestResult result) {
